@@ -1,0 +1,86 @@
+@HelpDesk.Api_HostAddress = http://localhost:5269
+@token = COLE_O_TOKEN_DO_LOGIN_AQUI
+
+### Login como solicitante
+POST {{HelpDesk.Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "usuario@helpdesk.local",
+  "password": "Usuario@123"
+}
+
+### Consultar o usuário autenticado
+GET {{HelpDesk.Api_HostAddress}}/api/auth/me
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Criar um chamado
+POST {{HelpDesk.Api_HostAddress}}/api/tickets
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Impressora não funciona",
+  "description": "A impressora do financeiro aparece como offline.",
+  "priority": "High"
+}
+
+### Listar todos os chamados
+GET {{HelpDesk.Api_HostAddress}}/api/tickets
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Consultar um chamado
+GET {{HelpDesk.Api_HostAddress}}/api/tickets/1
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Filtrar por status
+GET {{HelpDesk.Api_HostAddress}}/api/tickets?status=Open
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Buscar e combinar filtros
+GET {{HelpDesk.Api_HostAddress}}/api/tickets?search=impressora&priority=High&status=Open
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Consultar indicadores
+GET {{HelpDesk.Api_HostAddress}}/api/tickets/summary
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Atualizar um chamado
+PUT {{HelpDesk.Api_HostAddress}}/api/tickets/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Impressora não funciona",
+  "description": "O cabo foi verificado; o equipamento continua offline.",
+  "priority": "High",
+  "status": "InProgress"
+}
+
+### Atribuir a um técnico
+PATCH {{HelpDesk.Api_HostAddress}}/api/tickets/1/assign
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "technicianUserId": 2
+}
+
+### Adicionar comentário
+POST {{HelpDesk.Api_HostAddress}}/api/tickets/1/comments
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "message": "Estou verificando este chamado."
+}
+
+### Excluir um chamado
+DELETE {{HelpDesk.Api_HostAddress}}/api/tickets/1
+Authorization: Bearer {{token}}

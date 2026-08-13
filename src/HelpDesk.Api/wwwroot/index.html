@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="HelpDesk — sistema de gerenciamento de chamados de suporte.">
+  <title>HelpDesk — Gestão de Chamados</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #e5e9f2;
+      --surface: #fff;
+      --background: #f5f7fb;
+      --primary: #4f46e5;
+      --primary-dark: #3730a3;
+      --danger: #dc2626;
+      --success: #027a48;
+      --shadow: 0 12px 32px rgba(31, 42, 68, .08);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--background);
+      font: 15px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    button, input, textarea, select { font: inherit; }
+    .hidden { display: none !important; }
+    .container { width: min(1160px, calc(100% - 32px)); margin: 0 auto; }
+
+    .auth-screen {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(320px, 1fr) minmax(400px, 520px);
+      background: linear-gradient(135deg, #1e1b4b, #4338ca 55%, #7c3aed);
+    }
+    .auth-intro {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-width: 650px;
+      padding: 64px clamp(32px, 7vw, 100px);
+      color: #fff;
+    }
+    .auth-intro .eyebrow { color: #c4b5fd; font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .auth-intro h1 { margin: 14px 0; font-size: clamp(38px, 6vw, 70px); line-height: 1; letter-spacing: -.04em; }
+    .auth-intro p { max-width: 560px; margin: 0; color: #ddd6fe; font-size: 18px; }
+    .auth-features { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 30px; }
+    .auth-feature { padding: 7px 11px; border: 1px solid rgba(255,255,255,.18); border-radius: 999px; background: rgba(255,255,255,.08); font-size: 13px; }
+    .auth-panel { display: grid; place-items: center; min-height: 100vh; padding: 30px; background: rgba(255,255,255,.97); }
+    .login-card { width: min(100%, 390px); }
+    .login-card h2 { margin: 0; font-size: 27px; }
+    .login-card > p { margin: 6px 0 25px; color: var(--muted); }
+
+    label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; }
+    .field { margin-bottom: 15px; }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid #d8deea;
+      border-radius: 10px;
+      outline: none;
+      color: var(--ink);
+      background: #fff;
+      padding: 10px 12px;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    textarea { min-height: 100px; resize: vertical; }
+    input:focus, textarea:focus, select:focus { border-color: #818cf8; box-shadow: 0 0 0 3px rgba(99,102,241,.12); }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      border: 0;
+      border-radius: 10px;
+      padding: 9px 14px;
+      cursor: pointer;
+      font-weight: 750;
+      transition: transform .15s, background .15s;
+    }
+    .button:hover { transform: translateY(-1px); }
+    .button:disabled { cursor: wait; opacity: .6; transform: none; }
+    .primary { color: #fff; background: var(--primary); }
+    .primary:hover { background: var(--primary-dark); }
+    .secondary { color: #344054; border: 1px solid var(--line); background: #fff; }
+    .danger { color: var(--danger); background: #fef2f2; }
+    .full { width: 100%; }
+    .login-error { min-height: 22px; margin: 2px 0 10px; color: #b42318; font-size: 13px; }
+    .demo-box { margin-top: 24px; padding-top: 19px; border-top: 1px solid var(--line); }
+    .demo-box > strong { display: block; margin-bottom: 9px; font-size: 13px; }
+    .demo-account { display: flex; justify-content: space-between; gap: 10px; margin-top: 7px; padding: 9px 10px; border: 1px solid var(--line); border-radius: 9px; background: #fafbfc; }
+    .demo-account span { color: var(--muted); font-size: 12px; }
+    .demo-account button { border: 0; color: var(--primary); background: transparent; cursor: pointer; font-weight: 800; }
+
+    header { color: #fff; background: linear-gradient(120deg, #312e81, #4f46e5 55%, #7c3aed); padding: 22px 0 70px; }
+    .topbar, .section-heading, .ticket-top, .ticket-footer, .user-area { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .logo { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 13px; color: var(--primary-dark); background: #fff; font-size: 21px; font-weight: 900; box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+    .brand strong { display: block; font-size: 19px; }
+    .brand span, .user-info span { color: #ddd6fe; font-size: 12px; }
+    .user-info { text-align: right; }
+    .user-info strong { display: block; font-size: 13px; }
+    .logout { color: #fff; border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.1); }
+
+    main { margin-top: -42px; padding-bottom: 48px; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+    .stat, .panel { border: 1px solid rgba(229,233,242,.85); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow); }
+    .stat { padding: 18px 20px; }
+    .stat span { color: var(--muted); font-size: 13px; }
+    .stat strong { display: block; margin-top: 3px; font-size: 28px; line-height: 1.2; }
+    .layout { display: grid; grid-template-columns: 350px minmax(0,1fr); align-items: start; gap: 20px; }
+    .panel { padding: 23px; }
+    .panel h2 { margin: 0; font-size: 18px; }
+    .panel-subtitle { margin: 4px 0 20px; color: var(--muted); font-size: 13px; }
+
+    .filters { display: grid; grid-template-columns: minmax(180px,1fr) 145px 135px auto; gap: 8px; margin-bottom: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: #fafbfc; }
+    .filters input, .filters select { padding: 8px 10px; font-size: 13px; }
+    .filters .button { min-height: 38px; padding: 7px 11px; font-size: 13px; }
+    .result-count { margin: 0 0 12px; color: var(--muted); font-size: 12px; }
+    .ticket-list { display: grid; gap: 12px; }
+    .ticket { border: 1px solid var(--line); border-radius: 14px; padding: 17px; background: #fff; }
+    .ticket:hover { border-color: #c7d2fe; }
+    .ticket h3 { margin: 1px 0 0; font-size: 16px; }
+    .ticket-id { color: var(--muted); font-size: 11px; font-weight: 700; }
+    .ticket > p { margin: 10px 0 14px; color: #475467; white-space: pre-wrap; }
+    .meta { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
+    .badge { display: inline-flex; align-items: center; border-radius: 999px; padding: 4px 9px; color: #475467; background: #f2f4f7; font-size: 11px; font-weight: 750; }
+    .priority-Urgent, .priority-High { color: #b42318; background: #fee4e2; }
+    .priority-Medium { color: #b54708; background: #fef0c7; }
+    .priority-Low { color: #027a48; background: #d1fadf; }
+    .status-Open { color: #175cd3; background: #dbeafe; }
+    .status-InProgress { color: #6941c6; background: #ede9fe; }
+    .status-Resolved, .status-Closed { color: #027a48; background: #d1fadf; }
+    .requester { color: var(--muted); font-size: 12px; }
+    .ticket-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
+    .ticket-actions select { width: auto; min-width: 135px; padding: 7px 9px; font-size: 12px; }
+    .ticket-actions .button { min-height: 35px; padding: 7px 10px; font-size: 12px; }
+    .assignee { margin: 10px 0; padding: 10px; border-radius: 10px; color: #475467; background: #f8fafc; font-size: 12px; }
+    details { margin-top: 13px; border-top: 1px solid var(--line); padding-top: 11px; }
+    summary { color: #344054; cursor: pointer; font-size: 12px; font-weight: 750; }
+    .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 12px; }
+    .activity-grid h4 { margin: 0 0 8px; font-size: 12px; }
+    .activity-item { margin-bottom: 7px; padding: 8px 9px; border-radius: 8px; color: #475467; background: #f8fafc; font-size: 11px; }
+    .activity-item strong { display: block; color: #344054; }
+    .comment-form { display: flex; gap: 6px; margin-top: 8px; }
+    .comment-form input { padding: 7px 9px; font-size: 12px; }
+    .comment-form .button { min-height: 34px; padding: 6px 9px; font-size: 11px; }
+    .empty { padding: 44px 20px; border: 1px dashed #cbd5e1; border-radius: 14px; color: var(--muted); text-align: center; background: #fafbfc; }
+    .empty strong { display: block; margin-bottom: 4px; color: #344054; font-size: 16px; }
+    .toast { position: fixed; right: 20px; bottom: 20px; z-index: 20; max-width: 360px; border-radius: 12px; padding: 12px 16px; color: #fff; background: #101828; box-shadow: 0 18px 40px rgba(16,24,40,.24); opacity: 0; pointer-events: none; transform: translateY(10px); transition: .2s ease; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.error { background: #b42318; }
+
+    @media (max-width: 900px) {
+      .auth-screen { grid-template-columns: 1fr; }
+      .auth-intro { display: none; }
+      .stats { grid-template-columns: repeat(2,1fr); }
+      .layout { grid-template-columns: 1fr; }
+      .filters { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 570px) {
+      .brand span, .user-info { display: none; }
+      .stats { gap: 9px; }
+      .stat, .panel { padding: 15px; }
+      .filters { grid-template-columns: 1fr; }
+      .ticket-top, .ticket-footer { align-items: flex-start; flex-direction: column; }
+      .ticket-actions { width: 100%; }
+      .ticket-actions select { flex: 1; min-width: 0; }
+      .activity-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <section class="auth-screen" id="authScreen">
+    <div class="auth-intro">
+      <span class="eyebrow">Projeto de portfólio .NET</span>
+      <h1>HelpDesk</h1>
+      <p>Atendimento organizado, responsabilidades claras e histórico completo de cada chamado.</p>
+      <div class="auth-features">
+        <span class="auth-feature">ASP.NET Core</span>
+        <span class="auth-feature">JWT</span>
+        <span class="auth-feature">Perfis de acesso</span>
+        <span class="auth-feature">SQL Server ready</span>
+      </div>
+    </div>
+    <div class="auth-panel">
+      <div class="login-card">
+        <h2>Entrar no sistema</h2>
+        <p>Use uma conta de demonstração para conhecer cada perfil.</p>
+        <form id="loginForm">
+          <div class="field">
+            <label for="loginEmail">E-mail</label>
+            <input id="loginEmail" name="email" type="email" autocomplete="username" required placeholder="nome@empresa.com">
+          </div>
+          <div class="field">
+            <label for="loginPassword">Senha</label>
+            <input id="loginPassword" name="password" type="password" autocomplete="current-password" minlength="8" required placeholder="Sua senha">
+          </div>
+          <p class="login-error" id="loginError"></p>
+          <button class="button primary full" id="loginButton" type="submit">Entrar</button>
+        </form>
+        <div class="demo-box">
+          <strong>Contas de demonstração</strong>
+          <div class="demo-account"><span><b>Administrador</b><br>admin@helpdesk.local</span><button type="button" data-email="admin@helpdesk.local" data-password="Admin@123">Usar</button></div>
+          <div class="demo-account"><span><b>Técnico</b><br>tecnico@helpdesk.local</span><button type="button" data-email="tecnico@helpdesk.local" data-password="Tecnico@123">Usar</button></div>
+          <div class="demo-account"><span><b>Solicitante</b><br>usuario@helpdesk.local</span><button type="button" data-email="usuario@helpdesk.local" data-password="Usuario@123">Usar</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="app" class="hidden">
+    <header>
+      <div class="container topbar">
+        <div class="brand"><div class="logo">H</div><div><strong>HelpDesk</strong><span>Gestão de chamados de suporte</span></div></div>
+        <div class="user-area">
+          <div class="user-info"><strong id="currentUserName"></strong><span id="currentUserRole"></span></div>
+          <button class="button logout" id="logoutButton" type="button">Sair</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="stats" aria-label="Resumo dos chamados">
+        <div class="stat"><span>Total de chamados</span><strong id="totalCount">0</strong></div>
+        <div class="stat"><span>Abertos</span><strong id="openCount">0</strong></div>
+        <div class="stat"><span>Em andamento</span><strong id="progressCount">0</strong></div>
+        <div class="stat"><span>Resolvidos</span><strong id="resolvedCount">0</strong></div>
+      </section>
+
+      <div class="layout">
+        <section class="panel">
+          <h2>Novo chamado</h2>
+          <p class="panel-subtitle">Registre um problema para a equipe de suporte.</p>
+          <form id="ticketForm">
+            <div class="field"><label for="title">Título</label><input id="title" name="title" maxlength="120" required placeholder="Ex.: Impressora não funciona"></div>
+            <div class="field"><label for="description">Descrição</label><textarea id="description" name="description" maxlength="2000" required placeholder="Descreva o problema com detalhes"></textarea></div>
+            <div class="field"><label for="priority">Prioridade</label><select id="priority" name="priority"><option value="Low">Baixa</option><option value="Medium" selected>Média</option><option value="High">Alta</option><option value="Urgent">Urgente</option></select></div>
+            <button class="button primary full" id="submitButton" type="submit">Criar chamado</button>
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <div><h2>Chamados</h2><p class="panel-subtitle" style="margin-bottom:0" id="listSubtitle">Acompanhe e atualize as solicitações.</p></div>
+            <button class="button secondary" id="refreshButton" type="button">Atualizar</button>
+          </div>
+          <div class="filters" aria-label="Filtros dos chamados">
+            <input id="searchFilter" type="search" placeholder="Buscar título, descrição ou solicitante">
+            <select id="statusFilter" aria-label="Filtrar por status"><option value="">Todos os status</option><option value="Open">Abertos</option><option value="InProgress">Em andamento</option><option value="Resolved">Resolvidos</option><option value="Closed">Fechados</option></select>
+            <select id="priorityFilter" aria-label="Filtrar por prioridade"><option value="">Todas as prioridades</option><option value="Low">Baixa</option><option value="Medium">Média</option><option value="High">Alta</option><option value="Urgent">Urgente</option></select>
+            <button class="button secondary" id="clearFiltersButton" type="button">Limpar</button>
+          </div>
+          <p class="result-count" id="resultCount">Carregando chamados...</p>
+          <div class="ticket-list" id="ticketList"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    const apiUrl = "/api";
+    const roleLabels = { Requester: "Solicitante", Technician: "Técnico", Administrator: "Administrador" };
+    const labels = {
+      priorities: { Low: "Baixa", Medium: "Média", High: "Alta", Urgent: "Urgente" },
+      statuses: { Open: "Aberto", InProgress: "Em andamento", Resolved: "Resolvido", Closed: "Fechado" },
+      actions: { Created: "Criado", Updated: "Atualizado", Assigned: "Atribuído", Commented: "Comentário" }
+    };
+
+    const authScreen = document.querySelector("#authScreen");
+    const app = document.querySelector("#app");
+    const loginForm = document.querySelector("#loginForm");
+    const ticketForm = document.querySelector("#ticketForm");
+    const list = document.querySelector("#ticketList");
+    const toast = document.querySelector("#toast");
+    const searchFilter = document.querySelector("#searchFilter");
+    const statusFilter = document.querySelector("#statusFilter");
+    const priorityFilter = document.querySelector("#priorityFilter");
+    const resultCount = document.querySelector("#resultCount");
+    let token = localStorage.getItem("helpdesk.token");
+    let currentUser = null;
+    let tickets = [];
+    let technicians = [];
+
+    const canManage = () => ["Technician", "Administrator"].includes(currentUser?.role);
+    const isAdministrator = () => currentUser?.role === "Administrator";
+
+    function createElement(tag, className, text) {
+      const element = document.createElement(tag);
+      if (className) element.className = className;
+      if (text !== undefined) element.textContent = text;
+      return element;
+    }
+
+    function showToast(message, isError = false) {
+      toast.textContent = message;
+      toast.className = `toast show${isError ? " error" : ""}`;
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.className = "toast", 2800);
+    }
+
+    async function apiFetch(path, options = {}) {
+      const headers = new Headers(options.headers || {});
+      if (token) headers.set("Authorization", `Bearer ${token}`);
+      const response = await fetch(`${apiUrl}${path}`, { ...options, headers });
+      if (response.status === 401) {
+        logout(false);
+        throw new Error("Sua sessão expirou. Entre novamente.");
+      }
+      return response;
+    }
+
+    function logout(showMessage = true) {
+      token = null;
+      currentUser = null;
+      localStorage.removeItem("helpdesk.token");
+      app.classList.add("hidden");
+      authScreen.classList.remove("hidden");
+      if (showMessage) showToast("Sessão encerrada.");
+    }
+
+    async function login(email, password) {
+      const response = await fetch(`${apiUrl}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+      if (!response.ok) throw new Error("E-mail ou senha inválidos.");
+      const data = await response.json();
+      token = data.token;
+      currentUser = data.user;
+      localStorage.setItem("helpdesk.token", token);
+      await openApplication();
+    }
+
+    async function openApplication() {
+      authScreen.classList.add("hidden");
+      app.classList.remove("hidden");
+      document.querySelector("#currentUserName").textContent = currentUser.name;
+      document.querySelector("#currentUserRole").textContent = roleLabels[currentUser.role];
+      document.querySelector("#listSubtitle").textContent = currentUser.role === "Requester"
+        ? "Você visualiza somente os seus chamados."
+        : "Acompanhe, atribua e atualize as solicitações.";
+      technicians = canManage() ? await loadTechnicians() : [];
+      await refreshData();
+    }
+
+    async function restoreSession() {
+      if (!token) return;
+      try {
+        const response = await apiFetch("/auth/me");
+        if (!response.ok) throw new Error();
+        currentUser = await response.json();
+        await openApplication();
+      } catch { logout(false); }
+    }
+
+    async function loadTechnicians() {
+      const response = await apiFetch("/users?role=Technician");
+      return response.ok ? response.json() : [];
+    }
+
+    function updateStats(summary) {
+      document.querySelector("#totalCount").textContent = summary.total;
+      document.querySelector("#openCount").textContent = summary.open;
+      document.querySelector("#progressCount").textContent = summary.inProgress;
+      document.querySelector("#resolvedCount").textContent = summary.resolved + summary.closed;
+    }
+
+    function renderTickets() {
+      list.replaceChildren();
+      if (!tickets.length) {
+        const empty = createElement("div", "empty");
+        const hasFilters = searchFilter.value || statusFilter.value || priorityFilter.value;
+        empty.append(createElement("strong", "", hasFilters ? "Nenhum resultado encontrado" : "Nenhum chamado cadastrado"));
+        empty.append(hasFilters ? "Altere ou limpe os filtros para tentar novamente." : "Crie o primeiro chamado usando o formulário ao lado.");
+        list.append(empty);
+        return;
+      }
+      tickets.forEach(ticket => list.append(buildTicketCard(ticket)));
+    }
+
+    function buildTicketCard(ticket) {
+      const card = createElement("article", "ticket");
+      const top = createElement("div", "ticket-top");
+      const heading = document.createElement("div");
+      heading.append(createElement("span", "ticket-id", `CHAMADO #${ticket.id}`), createElement("h3", "", ticket.title));
+      top.append(heading, createElement("span", `badge status-${ticket.status}`, labels.statuses[ticket.status]));
+      const description = createElement("p", "", ticket.description);
+      const meta = createElement("div", "meta");
+      meta.append(createElement("span", `badge priority-${ticket.priority}`, `Prioridade ${labels.priorities[ticket.priority]}`));
+      meta.append(createElement("span", "badge", new Date(ticket.createdAtUtc).toLocaleString("pt-BR")));
+      meta.append(createElement("span", "badge", `${(ticket.comments || []).length} comentário(s)`));
+      const assignee = createElement("div", "assignee", ticket.assignedTechnicianName ? `Técnico responsável: ${ticket.assignedTechnicianName}` : "Ainda não atribuído a um técnico");
+      const footer = createElement("div", "ticket-footer");
+      footer.append(createElement("span", "requester", `${ticket.requesterName} • ${ticket.requesterEmail}`));
+      const actions = createElement("div", "ticket-actions");
+
+      if (canManage()) {
+        const statusSelect = document.createElement("select");
+        statusSelect.setAttribute("aria-label", `Status do chamado ${ticket.id}`);
+        Object.entries(labels.statuses).forEach(([value, label]) => statusSelect.add(new Option(label, value, false, value === ticket.status)));
+        statusSelect.addEventListener("change", () => updateStatus(ticket, statusSelect.value));
+        const technicianSelect = document.createElement("select");
+        technicianSelect.setAttribute("aria-label", `Técnico do chamado ${ticket.id}`);
+        technicianSelect.add(new Option("Atribuir técnico...", "", false, !ticket.assignedTechnicianUserId));
+        technicians.forEach(technician => technicianSelect.add(new Option(technician.name, technician.id, false, technician.id === ticket.assignedTechnicianUserId)));
+        technicianSelect.addEventListener("change", () => technicianSelect.value && assignTicket(ticket.id, Number(technicianSelect.value)));
+        actions.append(statusSelect, technicianSelect);
+      }
+
+      if (isAdministrator()) {
+        const deleteButton = createElement("button", "button danger", "Excluir");
+        deleteButton.type = "button";
+        deleteButton.addEventListener("click", () => deleteTicket(ticket));
+        actions.append(deleteButton);
+      }
+
+      footer.append(actions);
+      card.append(top, description, meta, assignee, footer, buildActivity(ticket));
+      return card;
+    }
+
+    function buildActivity(ticket) {
+      const details = document.createElement("details");
+      details.append(createElement("summary", "", "Comentários e histórico"));
+      const grid = createElement("div", "activity-grid");
+      const commentsColumn = document.createElement("div");
+      commentsColumn.append(createElement("h4", "", "Comentários"));
+      const comments = ticket.comments || [];
+      if (!comments.length) commentsColumn.append(createElement("div", "activity-item", "Nenhum comentário."));
+      comments.forEach(comment => {
+        const item = createElement("div", "activity-item", comment.message);
+        item.prepend(createElement("strong", "", `${comment.authorName} • ${new Date(comment.createdAtUtc).toLocaleString("pt-BR")}`));
+        commentsColumn.append(item);
+      });
+      const commentForm = createElement("form", "comment-form");
+      const commentInput = document.createElement("input");
+      commentInput.required = true;
+      commentInput.maxLength = 1000;
+      commentInput.placeholder = "Adicionar comentário";
+      const commentButton = createElement("button", "button secondary", "Enviar");
+      commentButton.type = "submit";
+      commentForm.append(commentInput, commentButton);
+      commentForm.addEventListener("submit", event => { event.preventDefault(); addComment(ticket.id, commentInput.value); });
+      commentsColumn.append(commentForm);
+
+      const historyColumn = document.createElement("div");
+      historyColumn.append(createElement("h4", "", "Histórico"));
+      const history = [...(ticket.history || [])].reverse();
+      if (!history.length) historyColumn.append(createElement("div", "activity-item", "Nenhum evento registrado."));
+      history.forEach(entry => {
+        const item = createElement("div", "activity-item", entry.details);
+        item.prepend(createElement("strong", "", `${labels.actions[entry.action] || entry.action} por ${entry.userName}`));
+        historyColumn.append(item);
+      });
+      grid.append(commentsColumn, historyColumn);
+      details.append(grid);
+      return details;
+    }
+
+    async function loadTickets() {
+      const parameters = new URLSearchParams();
+      if (searchFilter.value.trim()) parameters.set("search", searchFilter.value.trim());
+      if (statusFilter.value) parameters.set("status", statusFilter.value);
+      if (priorityFilter.value) parameters.set("priority", priorityFilter.value);
+      const response = await apiFetch(`/tickets${parameters.size ? `?${parameters}` : ""}`);
+      if (!response.ok) throw new Error("Não foi possível consultar os chamados.");
+      tickets = await response.json();
+      resultCount.textContent = `${tickets.length} chamado${tickets.length === 1 ? "" : "s"} encontrado${tickets.length === 1 ? "" : "s"}`;
+      renderTickets();
+    }
+
+    async function refreshData() {
+      const summaryResponse = await apiFetch("/tickets/summary");
+      if (!summaryResponse.ok) throw new Error("Não foi possível carregar os indicadores.");
+      await Promise.all([loadTickets(), summaryResponse.json().then(updateStats)]);
+    }
+
+    async function updateStatus(ticket, status) {
+      const response = await apiFetch(`/tickets/${ticket.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ title: ticket.title, description: ticket.description, priority: ticket.priority, status }) });
+      if (!response.ok) return showToast("Não foi possível atualizar o status.", true);
+      showToast("Status atualizado e registrado no histórico.");
+      await refreshData();
+    }
+
+    async function assignTicket(ticketId, technicianUserId) {
+      const response = await apiFetch(`/tickets/${ticketId}/assign`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ technicianUserId }) });
+      if (!response.ok) return showToast("Não foi possível atribuir o chamado.", true);
+      showToast("Técnico atribuído.");
+      await refreshData();
+    }
+
+    async function addComment(ticketId, message) {
+      const response = await apiFetch(`/tickets/${ticketId}/comments`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message }) });
+      if (!response.ok) return showToast("Não foi possível adicionar o comentário.", true);
+      showToast("Comentário adicionado.");
+      await refreshData();
+    }
+
+    async function deleteTicket(ticket) {
+      if (!confirm(`Excluir permanentemente o chamado #${ticket.id}?`)) return;
+      const response = await apiFetch(`/tickets/${ticket.id}`, { method: "DELETE" });
+      if (!response.ok) return showToast("Não foi possível excluir o chamado.", true);
+      showToast("Chamado excluído.");
+      await refreshData();
+    }
+
+    loginForm.addEventListener("submit", async event => {
+      event.preventDefault();
+      const button = document.querySelector("#loginButton");
+      const error = document.querySelector("#loginError");
+      button.disabled = true;
+      error.textContent = "";
+      try { await login(loginForm.email.value, loginForm.password.value); }
+      catch (exception) { error.textContent = exception.message; }
+      finally { button.disabled = false; }
+    });
+
+    document.querySelectorAll("[data-email]").forEach(button => button.addEventListener("click", () => {
+      loginForm.email.value = button.dataset.email;
+      loginForm.password.value = button.dataset.password;
+      document.querySelector("#loginError").textContent = "Credenciais preenchidas. Clique em Entrar.";
+    }));
+
+    ticketForm.addEventListener("submit", async event => {
+      event.preventDefault();
+      const button = document.querySelector("#submitButton");
+      button.disabled = true;
+      try {
+        const response = await apiFetch("/tickets", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(Object.fromEntries(new FormData(ticketForm))) });
+        if (!response.ok) throw new Error("Confira os dados e tente novamente.");
+        ticketForm.reset();
+        showToast("Chamado criado com sucesso.");
+        await refreshData();
+      } catch (exception) { showToast(exception.message, true); }
+      finally { button.disabled = false; }
+    });
+
+    document.querySelector("#logoutButton").addEventListener("click", () => logout());
+    document.querySelector("#refreshButton").addEventListener("click", refreshData);
+    statusFilter.addEventListener("change", loadTickets);
+    priorityFilter.addEventListener("change", loadTickets);
+    searchFilter.addEventListener("input", () => { clearTimeout(searchFilter.timer); searchFilter.timer = setTimeout(loadTickets, 300); });
+    document.querySelector("#clearFiltersButton").addEventListener("click", () => { searchFilter.value = ""; statusFilter.value = ""; priorityFilter.value = ""; loadTickets(); });
+    restoreSession();
+  </script>
+</body>
+</html>

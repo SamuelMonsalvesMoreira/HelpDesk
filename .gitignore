@@ -1,0 +1,11 @@
+**/bin/
+**/obj/
+.vs/
+.vscode/
+*.user
+*.suo
+*.db
+.env
+work/
+outputs/
+**/App_Data/
