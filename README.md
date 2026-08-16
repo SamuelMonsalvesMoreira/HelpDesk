@@ -94,8 +94,6 @@ HelpDesk/
 |   `-- wwwroot/         # Interface web responsiva
 |-- tests/HelpDesk.Api.Tests/
 |   `-- Testes automatizados dos repositórios
-|-- docs/
-|   `-- Guia para entrevistas
 `-- CHANGELOG.md
 ```
 
@@ -200,7 +198,7 @@ O nome e o e-mail do solicitante são obtidos do token, e não aceitos livrement
 }
 ```
 
-## Decisões técnicas para explicar em entrevistas
+## Decisões de arquitetura
 
 - **JWT:** identifica o usuário sem armazenar sessão no servidor.
 - **Autorização por perfil:** impede ações indevidas no back-end, mesmo que alguém tente ignorar a interface.
@@ -240,7 +238,6 @@ O nome e o e-mail do solicitante são obtidos do token, e não aceitos livrement
 ## Documentação adicional
 
 - [Histórico de versões](CHANGELOG.md)
-- [Guia para entrevistas](docs/GUIA-ENTREVISTA.md)
 
 ## Objetivo
 
