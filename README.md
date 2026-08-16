@@ -7,9 +7,15 @@
 ![SQL Server](https://img.shields.io/badge/SQL_Server-ready-CC2927?logo=microsoftsqlserver)
 ![Tests](https://img.shields.io/badge/tests-4_passing-16a34a)
 
-Sistema full stack para gerenciamento de chamados de suporte técnico. O projeto demonstra uma aplicação profissional em C# e ASP.NET Core com autenticação JWT, autorização por perfil, API REST, persistência, histórico de auditoria, testes automatizados e suporte ao Microsoft SQL Server.
+Este é o meu sistema full stack para gerenciamento de chamados de suporte técnico. Nele pratiquei C# e ASP.NET Core construindo uma API REST com autenticação JWT, autorização por perfil, persistência, histórico de auditoria, testes automatizados e suporte ao Microsoft SQL Server.
 
-## Destaques da versão 5
+## Por que criei este projeto
+
+Sou formado em Análise e Desenvolvimento de Sistemas pela Fatec e criei o HelpDesk para transformar os conceitos que estudei em um sistema completo, próximo de um cenário de trabalho real. Escolhi um fluxo de suporte porque ele me permitiu praticar regras de negócio, segurança, banco de dados e integração entre front-end e back-end no mesmo projeto.
+
+Durante o desenvolvimento, comecei com um CRUD simples e fui evoluindo a aplicação por etapas. A decisão de manter repositórios JSON e SQL Server foi intencional: o JSON facilita a demonstração local, enquanto o Entity Framework Core e as migrations mostram como a aplicação pode usar um banco relacional.
+
+## O que já funciona
 
 - Login seguro com JWT assinado e expiração
 - Senhas protegidas com `PasswordHasher` do ASP.NET Core
@@ -32,9 +38,9 @@ Sistema full stack para gerenciamento de chamados de suporte técnico. O projeto
 | Técnico | Visualiza todos, recebe atribuições, comenta e altera prioridade/status |
 | Administrador | Possui as permissões do técnico e pode excluir chamados |
 
-### Contas locais de demonstração
+### Contas de demonstração
 
-As contas abaixo são criadas somente no ambiente `Development`:
+As contas abaixo são criadas automaticamente nos ambientes de demonstração:
 
 | Perfil | E-mail | Senha |
 |---|---|---|
@@ -42,7 +48,7 @@ As contas abaixo são criadas somente no ambiente `Development`:
 | Técnico | `tecnico@helpdesk.local` | `Tecnico@123` |
 | Solicitante | `usuario@helpdesk.local` | `Usuario@123` |
 
-Essas credenciais são apenas para demonstração local. `SeedDemoUsers` vem desativado na configuração padrão de produção.
+Essas credenciais não devem ser usadas em um ambiente de produção real. No Render, os dados podem ser reiniciados quando o serviço gratuito hiberna ou é publicado novamente.
 
 ## Tecnologias
 
@@ -242,3 +248,4 @@ O nome e o e-mail do solicitante são obtidos do token, e não aceitos livrement
 ## Objetivo
 
 Demonstrar competências relevantes para vagas de desenvolvimento C#/.NET: modelagem, API REST, autenticação, autorização, Entity Framework Core, SQL Server, persistência, testes, segurança, arquitetura, Git e documentação técnica.
+

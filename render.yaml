@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: helpdesk-samuel
+    runtime: docker
+    plan: free
+    region: virginia
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_FORWARDEDHEADERS_ENABLED
+        value: true
+      - key: StorageProvider
+        value: Json
+      - key: Storage__JsonFilePath
+        value: /tmp/helpdesk/tickets.json
+      - key: Storage__JsonUsersFilePath
+        value: /tmp/helpdesk/users.json
+      - key: SeedDemoUsers
+        value: true
+      - key: Jwt__Issuer
+        value: HelpDesk.Api
+      - key: Jwt__Audience
+        value: HelpDesk.Web
+      - key: Jwt__Key
+        generateValue: true
+
