@@ -13,6 +13,8 @@ services:
         value: Production
       - key: ASPNETCORE_FORWARDEDHEADERS_ENABLED
         value: true
+      - key: DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE
+        value: false
       - key: StorageProvider
         value: Json
       - key: Storage__JsonFilePath
@@ -27,4 +29,3 @@ services:
         value: HelpDesk.Web
       - key: Jwt__Key
         generateValue: true
-
