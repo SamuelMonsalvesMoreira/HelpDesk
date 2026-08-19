@@ -18,7 +18,7 @@ Como o serviço utiliza o plano gratuito, a primeira abertura pode levar alguns 
 
 ## Por que criei este projeto
 
-Sou formado em Análise e Desenvolvimento de Sistemas pela Fatec e criei o HelpDesk para transformar os conceitos que estudei em um sistema completo, próximo de um cenário de trabalho real. Escolhi um fluxo de suporte porque ele me permitiu praticar regras de negócio, segurança, banco de dados e integração entre front-end e back-end no mesmo projeto.
+Criei o HelpDesk para transformar conhecimentos de Análise e Desenvolvimento de Sistemas em um sistema completo, próximo de um cenário de trabalho real. Escolhi um fluxo de suporte porque ele me permitiu praticar regras de negócio, segurança, banco de dados e integração entre front-end e back-end no mesmo projeto.
 
 Durante o desenvolvimento, comecei com um CRUD simples e fui evoluindo a aplicação por etapas. A decisão de manter repositórios JSON e SQL Server foi intencional: o JSON facilita a demonstração local, enquanto o Entity Framework Core e as migrations mostram como a aplicação pode usar um banco relacional.
 
