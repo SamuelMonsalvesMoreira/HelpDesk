@@ -6,8 +6,15 @@
 ![Entity Framework Core](https://img.shields.io/badge/Entity_Framework-Core-6C3483)
 ![SQL Server](https://img.shields.io/badge/SQL_Server-ready-CC2927?logo=microsoftsqlserver)
 ![Tests](https://img.shields.io/badge/tests-4_passing-16a34a)
+[![Demonstração online](https://img.shields.io/badge/demonstração-online-16a34a)](https://helpdesk-samuel.onrender.com/)
 
 Este é o meu sistema full stack para gerenciamento de chamados de suporte técnico. Nele pratiquei C# e ASP.NET Core construindo uma API REST com autenticação JWT, autorização por perfil, persistência, histórico de auditoria, testes automatizados e suporte ao Microsoft SQL Server.
+
+## Demonstração online
+
+[Acessar o HelpDesk publicado no Render](https://helpdesk-samuel.onrender.com/)
+
+Como o serviço utiliza o plano gratuito, a primeira abertura pode levar alguns instantes. As contas e os dados são exclusivamente demonstrativos e podem ser reiniciados após uma nova publicação.
 
 ## Por que criei este projeto
 
@@ -62,6 +69,8 @@ Essas credenciais não devem ser usadas em um ambiente de produção real. No Re
 - HTML, CSS e JavaScript
 - Persistência JSON para execução local sem instalações adicionais
 - Git e GitHub
+- Docker com build em múltiplos estágios
+- Render Blueprint para implantação reproduzível
 
 ## Arquitetura
 
@@ -100,6 +109,8 @@ HelpDesk/
 |   `-- wwwroot/         # Interface web responsiva
 |-- tests/HelpDesk.Api.Tests/
 |   `-- Testes automatizados dos repositórios
+|-- Dockerfile            # Build de produção em múltiplos estágios
+|-- render.yaml           # Infraestrutura e implantação no Render
 `-- CHANGELOG.md
 ```
 
@@ -239,7 +250,7 @@ O nome e o e-mail do solicitante são obtidos do token, e não aceitos livrement
 - [ ] Adicionar refresh token e recuperação de senha
 - [ ] Criar paginação
 - [ ] Adicionar pipeline de integração contínua
-- [ ] Publicar uma demonstração online
+- [x] Publicar uma demonstração online
 
 ## Documentação adicional
 
