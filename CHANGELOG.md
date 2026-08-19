@@ -1,5 +1,13 @@
 # Histórico de versões
 
+## Versão 6
+
+- Imagem Docker de produção com build em múltiplos estágios
+- Blueprint do Render versionado em `render.yaml`
+- Demonstração pública no Render
+- Endpoint de monitoramento em `/health`
+- Configuração de inicialização estável para os limites do ambiente gratuito
+
 ## Versão 5
 
 - Login com JWT assinado e expiração
@@ -13,7 +21,7 @@
 - Repositório de usuários para JSON e SQL Server
 - Migration inicial do SQL Server
 - Quatro testes automatizados com xUnit
-- README e guia de entrevista atualizados
+- README e documentação pública atualizados
 
 ## Versão 4
 
@@ -25,7 +33,7 @@
 - Filtros combinados por status e prioridade
 - Endpoint de indicadores
 - Interface atualizada com busca e filtros
-- README e guia de entrevista revisados
+- README e documentação pública revisados
 
 ## Versão 3
 
