@@ -5,7 +5,7 @@
 ![JWT](https://img.shields.io/badge/Auth-JWT-000000?logo=jsonwebtokens)
 ![Entity Framework Core](https://img.shields.io/badge/Entity_Framework-Core-6C3483)
 ![SQL Server](https://img.shields.io/badge/SQL_Server-ready-CC2927?logo=microsoftsqlserver)
-![Tests](https://img.shields.io/badge/tests-4_passing-16a34a)
+[![CI](https://github.com/SamuelMonsalvesMoreira/HelpDesk/actions/workflows/ci.yml/badge.svg)](https://github.com/SamuelMonsalvesMoreira/HelpDesk/actions/workflows/ci.yml)
 [![Demonstração online](https://img.shields.io/badge/demonstração-online-16a34a)](https://helpdesk-samuel.onrender.com/)
 
 Este é o meu sistema full stack para gerenciamento de chamados de suporte técnico. Nele pratiquei C# e ASP.NET Core construindo uma API REST com autenticação JWT, autorização por perfil, persistência, histórico de auditoria, testes automatizados e suporte ao Microsoft SQL Server.
@@ -249,7 +249,7 @@ O nome e o e-mail do solicitante são obtidos do token, e não aceitos livrement
 - [ ] Validar em uma instância real do SQL Server
 - [ ] Adicionar refresh token e recuperação de senha
 - [ ] Criar paginação
-- [ ] Adicionar pipeline de integração contínua
+- [x] Adicionar pipeline de integração contínua
 - [x] Publicar uma demonstração online
 
 ## Documentação adicional
