@@ -12,7 +12,9 @@ services:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
       - key: ASPNETCORE_FORWARDEDHEADERS_ENABLED
-        value: true
+        value: "true"
+      - key: DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE
+        value: "false"
       - key: StorageProvider
         value: Json
       - key: Storage__JsonFilePath
@@ -20,11 +22,10 @@ services:
       - key: Storage__JsonUsersFilePath
         value: /tmp/helpdesk/users.json
       - key: SeedDemoUsers
-        value: true
+        value: "true"
       - key: Jwt__Issuer
         value: HelpDesk.Api
       - key: Jwt__Audience
         value: HelpDesk.Web
       - key: Jwt__Key
         generateValue: true
-
