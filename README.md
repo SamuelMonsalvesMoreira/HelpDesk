@@ -8,13 +8,41 @@
 [![CI](https://github.com/SamuelMonsalvesMoreira/HelpDesk/actions/workflows/ci.yml/badge.svg)](https://github.com/SamuelMonsalvesMoreira/HelpDesk/actions/workflows/ci.yml)
 [![Demonstração online](https://img.shields.io/badge/demonstração-online-16a34a)](https://helpdesk-samuel.onrender.com/)
 
-Este é o meu sistema full stack para gerenciamento de chamados de suporte técnico. Nele pratiquei C# e ASP.NET Core construindo uma API REST com autenticação JWT, autorização por perfil, persistência, histórico de auditoria, testes automatizados e suporte ao Microsoft SQL Server.
+Aplicação full stack para gerenciamento de chamados de suporte técnico. O sistema reúne autenticação JWT, autorização por perfil, atribuição, comentários, filtros, indicadores e histórico de auditoria, com persistência local ou SQL Server.
 
 ## Demonstração online
 
-[Acessar o HelpDesk publicado no Render](https://helpdesk-samuel.onrender.com/)
+### [Abrir demonstração do HelpDesk](https://helpdesk-samuel.onrender.com/)
 
-Como o serviço utiliza o plano gratuito, a primeira abertura pode levar alguns instantes. As contas e os dados são exclusivamente demonstrativos e podem ser reiniciados após uma nova publicação.
+A primeira abertura pode levar alguns segundos porque o serviço utiliza o plano gratuito do Render.
+
+## Demonstração visual
+
+### Painel administrativo
+
+![Painel do HelpDesk com indicadores e chamados](docs/screenshots/dashboard.png)
+
+### Comentários e histórico
+
+![Chamado com responsável, comentário e histórico](docs/screenshots/history.png)
+
+<details>
+<summary>Ver tela de login</summary>
+
+![Tela de login do HelpDesk](docs/screenshots/login.png)
+
+</details>
+
+## Visão técnica
+
+| Área | Implementação |
+|---|---|
+| Back-end | C#, .NET 10 e ASP.NET Core Web API |
+| Interface | HTML, CSS e JavaScript responsivo |
+| Segurança | JWT, hash de senha e autorização por perfil |
+| Dados | JSON local ou Entity Framework Core com SQL Server |
+| Qualidade | xUnit e GitHub Actions |
+| Publicação | Docker e Render Blueprint |
 
 ## Por que criei este projeto
 
@@ -55,7 +83,7 @@ As contas abaixo são criadas automaticamente nos ambientes de demonstração:
 | Técnico | `tecnico@helpdesk.local` | `Tecnico@123` |
 | Solicitante | `usuario@helpdesk.local` | `Usuario@123` |
 
-Essas credenciais não devem ser usadas em um ambiente de produção real. No Render, os dados podem ser reiniciados quando o serviço gratuito hiberna ou é publicado novamente.
+As contas acima são usadas somente no ambiente de demonstração.
 
 ## Tecnologias
 
@@ -259,4 +287,6 @@ O nome e o e-mail do solicitante são obtidos do token, e não aceitos livrement
 ## Objetivo
 
 Demonstrar competências relevantes para vagas de desenvolvimento C#/.NET: modelagem, API REST, autenticação, autorização, Entity Framework Core, SQL Server, persistência, testes, segurança, arquitetura, Git e documentação técnica.
+
+
 
